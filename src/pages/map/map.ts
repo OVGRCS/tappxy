@@ -9,7 +9,7 @@ import {
   GoogleMapOptions,
   CameraPosition,
   MarkerOptions,
-  Marker
+  Marker, LatLng
 } from '@ionic-native/google-maps';
 
 @IonicPage()
@@ -20,24 +20,25 @@ import {
 export class MapPage {
 
   map: GoogleMap;
+  private fromGeo;
 
   constructor(
     private navCtrl: NavController,
-    private googleMaps: GoogleMaps
+    private googleMaps: GoogleMaps,
+    private geolocation: Geolocation
   ) {}
 
   ionViewDidLoad(){
-    this.loadMap();
+    this.fetCords();
   }
 
-  loadMap(){
+  loadMap(lat: number, lon:number){
+
+    let crrLoc: LatLng = new LatLng(lat,lon)
 
     let mapOptions: GoogleMapOptions = {
       camera: {
-        target: {
-          lat: 43.0741904, // default location
-          lng: -89.3809802 // default location
-        },
+        target: crrLoc,
         zoom: 18,
         tilt: 30
       }
@@ -55,6 +56,22 @@ export class MapPage {
         console.log(error);
       });
 
+  }
+
+  private fetCords() {
+    // maps api key : AIzaSyCZhTJB1kFAP70RuwDtt6uso9e3DCLdRWs
+    // ionic plugin add cordova-plugin-googlemaps --variable API_KEY_FOR_ANDROID="AIzaSyCZhTJB1kFAP70RuwDtt6uso9e3DCLdRWs"
+    this.geolocation.getCurrentPosition().then((resp) => {
+      // resp.coords.latitude
+      // resp.coords.longitude
+      // console.log(resp);
+      this.fromGeo = resp.coords;
+      this.loadMap(this.fromGeo.latitude, this.fromGeo.longitude)
+      // Get the products at this location
+      // Trip in progress?
+    }).catch((error) => {
+      console.log('Error getting location', error);
+    });
   }
 
   getPosition(): void{
