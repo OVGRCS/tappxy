@@ -50,6 +50,12 @@ export class MapPage {
     this.map.one(GoogleMapsEvent.MAP_READY)
       .then(() => {
         // Now you can use all methods safely.
+        let markerOptions: MarkerOptions = {
+          position: crrLoc,
+          title: "Tu posición"
+        };
+
+        this.map.addMarker(markerOptions);
         this.getPosition();
       })
       .catch(error =>{
