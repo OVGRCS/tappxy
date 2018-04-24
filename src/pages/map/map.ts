@@ -9,7 +9,11 @@ import {
   GoogleMapOptions,
   CameraPosition,
   MarkerOptions,
-  Marker, LatLng
+  Marker,
+  LatLng,
+  Geocoder,
+  GeocoderRequest,
+  GeocoderResult
 } from '@ionic-native/google-maps';
 
 @IonicPage()
@@ -20,12 +24,14 @@ import {
 export class MapPage {
 
   map: GoogleMap;
-  private fromGeo;
+  fromGeo: any;
+  address: any;
 
   constructor(
     private navCtrl: NavController,
     private googleMaps: GoogleMaps,
-    private geolocation: Geolocation
+    private geolocation: Geolocation,
+    private geocoder: Geocoder
   ) {}
 
   ionViewDidLoad(){
@@ -45,6 +51,7 @@ export class MapPage {
     };
 
     this.map = this.googleMaps.create('map_canvas', mapOptions);
+    //this.doGeocode();
 
     // Wait the MAP_READY before using any methods.
     this.map.one(GoogleMapsEvent.MAP_READY)
@@ -79,6 +86,20 @@ export class MapPage {
       console.log('Error getting location', error);
     });
   }
+
+  /*doGeocode(){
+    let request: GeocoderRequest = {
+      position: new LatLng(this.fromGeo.latitude, this.fromGeo.longitude),
+    };
+    this.geocoder.geocode(request)
+      .then((results: GeocoderResult) => {
+        this.address = [
+          (results[0].thoroughfare || "") + " " + (results[0].subThoroughfare || ""),
+          results[0].locality
+        ].join(", ");
+        console.log("data_: ", this.address);
+      });
+  }*/
 
   getPosition(): void{
     this.map.getMyLocation()

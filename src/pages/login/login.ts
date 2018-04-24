@@ -11,6 +11,7 @@ import { LoggedinPage } from '../loggedin/loggedin';
  * on Ionic pages and navigation.
  */
 @IonicPage()
+
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html',

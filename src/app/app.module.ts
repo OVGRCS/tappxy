@@ -14,7 +14,8 @@ import { LoggedinPage } from '../pages/loggedin/loggedin';
 import { RegisterPage } from '../pages/register/register';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
-import {GoogleMaps} from "@ionic-native/google-maps";
+import { AngularFireDatabaseModule} from "angularfire2/database";
+import {Geocoder, GoogleMaps} from "@ionic-native/google-maps";
 import {MapPage} from "../pages/map/map";
 import {Geolocation} from "@ionic-native/geolocation";
 import {Diagnostic} from "@ionic-native/diagnostic";
@@ -42,7 +43,8 @@ const firebaseAuth = {
     BrowserModule,
     IonicModule.forRoot(MyApp),
     AngularFireModule.initializeApp(firebaseAuth),
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    AngularFireDatabaseModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -60,6 +62,7 @@ const firebaseAuth = {
     GoogleMaps,
     Geolocation,
     Diagnostic,
+    Geocoder,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

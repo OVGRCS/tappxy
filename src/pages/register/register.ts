@@ -1,6 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { AngularFireAuth } from 'angularfire2/auth';
+import {AngularFireDatabase, AngularFireDatabaseModule, AngularFireList} from "angularfire2/database";
+import { Observable} from "rxjs/Observable";
+import {LoginPage} from "../login/login";
+import {HomePage} from "../home/home";
 
 /**
  * Generated class for the RegisterPage page.
@@ -18,9 +22,18 @@ export class RegisterPage {
 
   @ViewChild('email') email;
   @ViewChild('password') password;
+  @ViewChild('username') username;
+  @ViewChild('phone') phone;
 
-  constructor(private alertCtrl: AlertController, private fire: AngularFireAuth, public navCtrl: NavController, public navParams: NavParams) {
+  usersRef: AngularFireList<any>;
+  users: Observable<any>;
 
+  constructor(private alertCtrl: AlertController, private fire: AngularFireAuth, public navCtrl: NavController, public navParams: NavParams, public database: AngularFireDatabase) {
+    this.usersRef = this.database.list('users');
+    this.users = this.usersRef.snapshotChanges()
+      .map(changes => {
+        return changes.map(c => ({ key: c.payload.key, ...c.payload.val()}));
+      });
   }
 
   ionViewDidLoad() {
@@ -36,10 +49,19 @@ export class RegisterPage {
   }
 
   registerUser() {
+
     this.fire.auth.createUserWithEmailAndPassword(this.email.value, this.password.value)
       .then(data => {
+        this.usersRef.push({
+          user: this.email.value,
+          password: this.password.value,
+          username: this.username.value,
+          phone: this.phone.value
+
+        });
         console.log('got data ', data);
-        this.alert('Registered!');
+        this.alert('Su cuenta ha sido registrada');
+        this.navCtrl.push(HomePage);
       })
       .catch(error => {
         console.log('got an error ', error);
