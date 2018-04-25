@@ -10,11 +10,9 @@ import {
   CameraPosition,
   MarkerOptions,
   Marker,
-  LatLng,
-  Geocoder,
-  GeocoderRequest,
-  GeocoderResult
+  LatLng
 } from '@ionic-native/google-maps';
+import {NativeGeocoder, NativeGeocoderReverseResult} from "@ionic-native/native-geocoder";
 
 @IonicPage()
 @Component({
@@ -25,13 +23,15 @@ export class MapPage {
 
   map: GoogleMap;
   fromGeo: any;
-  address: any;
+  geoCoder: any;
+  address: string;
+  number: string;
 
   constructor(
     private navCtrl: NavController,
     private googleMaps: GoogleMaps,
     private geolocation: Geolocation,
-    private geocoder: Geocoder
+    private nativeGeocoder: NativeGeocoder
   ) {}
 
   ionViewDidLoad(){
@@ -68,6 +68,13 @@ export class MapPage {
       .catch(error =>{
         console.log(error);
       });
+
+    this.nativeGeocoder.reverseGeocode(this.fromGeo.latitude, this.fromGeo.longitude)
+      .then((result: NativeGeocoderReverseResult) => {
+        this.address = result[0].thoroughfare;
+        this.number = result[0].subThoroughfare;
+      })
+      .catch((error: any) => console.log(error));
 
   }
 

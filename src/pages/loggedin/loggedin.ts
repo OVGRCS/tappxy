@@ -36,4 +36,5 @@ export class LoggedinPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad LoggedinPage');
   }
+
 }
