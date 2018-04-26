@@ -28,6 +28,12 @@ const firebaseAuth = {
   projectId: "test-fa9f4",
   storageBucket: "test-fa9f4.appspot.com",
   messagingSenderId: "665716891650"
+  apiKey: "AIzaSyBkxxp48ViiHPkz0XDiTqc5lsTMqdIsBQw",
+  authDomain: "tappxy-6c995.firebaseapp.com",
+  databaseURL: "https://tappxy-6c995.firebaseio.com",
+  projectId: "tappxy-6c995",
+  storageBucket: "",
+  messagingSenderId: "404382202581"
 };
 
 @NgModule({
