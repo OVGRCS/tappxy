@@ -22,12 +22,12 @@ import {Diagnostic} from "@ionic-native/diagnostic";
 import {NativeGeocoder} from "@ionic-native/native-geocoder";
 
 const firebaseAuth = {
-  apiKey: "AIzaSyDWRv60y1GLJlTdd7XGhuBIMFzBtq04y_E",
-  authDomain: "test-fa9f4.firebaseapp.com",
-  databaseURL: "https://test-fa9f4.firebaseio.com",
-  projectId: "test-fa9f4",
-  storageBucket: "test-fa9f4.appspot.com",
-  messagingSenderId: "665716891650"
+  apiKey: "AIzaSyBkxxp48ViiHPkz0XDiTqc5lsTMqdIsBQw",
+  authDomain: "tappxy-6c995.firebaseapp.com",
+  databaseURL: "https://tappxy-6c995.firebaseio.com",
+  projectId: "tappxy-6c995",
+  storageBucket: "",
+  messagingSenderId: "404382202581"
 };
 
 @NgModule({
