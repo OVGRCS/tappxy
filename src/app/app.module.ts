@@ -20,6 +20,8 @@ import {MapPage} from "../pages/map/map";
 import {Geolocation} from "@ionic-native/geolocation";
 import {Diagnostic} from "@ionic-native/diagnostic";
 import {NativeGeocoder} from "@ionic-native/native-geocoder";
+import { AngularFireDatabase } from 'angularfire2/database';
+
 
 const firebaseAuth = {
   apiKey: "AIzaSyBkxxp48ViiHPkz0XDiTqc5lsTMqdIsBQw",
@@ -58,6 +60,7 @@ const firebaseAuth = {
     MapPage
   ],
   providers: [
+    AngularFireDatabase,
     StatusBar,
     SplashScreen,
     GoogleMaps,
