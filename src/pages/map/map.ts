@@ -17,6 +17,8 @@ import {NativeGeocoder, NativeGeocoderForwardResult, NativeGeocoderReverseResult
 import {AngularFireDatabase, AngularFireList} from "angularfire2/database";
 import {Observable} from "rxjs/Observable";
 import {AngularFireAuth} from "angularfire2/auth";
+import {root} from "rxjs/util/root";
+import {HomePage} from "../home/home";
 
 @IonicPage()
 @Component({
@@ -44,6 +46,7 @@ export class MapPage {
     private fire:AngularFireAuth,
     private alertCtrl: AlertController
   ) {
+    this.currentUser = firebase.auth().currentUser.email;
     this.usersRef = this.database.list('trayectos');
     this.users = this.usersRef.snapshotChanges()
       .map(changes => {
@@ -124,19 +127,18 @@ export class MapPage {
 
   taxiUbicacion(){
 
-    var aux= firebase.auth().currentUser.email;
-    console.log(aux);
-    
     this.usersRef.push({
-      user: aux,
-      address: this.address
+      user: this.currentUser,
+      address: this.address + " " + this.number
     })
+
+
   }
 
   showPrompt() {
     let prompt = this.alertCtrl.create({
-      title: 'Login',
-      message: "Enter a name for this new album you're so keen on adding",
+      title: 'Ubicación',
+      message: "Por favor, introduzca la dirección donde desea pedir su taxi",
       inputs: [
         {
           name: 'address',
@@ -170,17 +172,31 @@ export class MapPage {
 
   moveCamera(address: string, number: string){
 
+
+
     this.nativeGeocoder.forwardGeocode(address)
       .then((result: NativeGeocoderForwardResult) => {
         this.map.animateCamera({
-          target: {
-            lon: result[0].longitude,
-            lat: result[0].latitude
-          }
+          target: new LatLng(result[0].latitude, result[0].longitude)
         });
+        let markerOptions: MarkerOptions = {
+          position: new LatLng(result[0].latitude, result[0].longitude),
+          title: "Tu posición",
+          tilt: 60,
+          zoom: 18,
+          bearing: 140,
+          duration: 5000
+        };
+        this.map.addMarker(markerOptions)
       })
       .catch((error: any) => console.log('No ha podido ser la redireccion'))
 
+  }
+
+  logOut(){
+    this.fire.auth.signOut();
+    console.log(this.fire.auth.currentUser);
+    this.navCtrl.setRoot( HomePage );
   }
 
 }

@@ -31,12 +31,7 @@ export class RegisterPage {
   prueba: Observable<any>;
 
   constructor(private alertCtrl: AlertController, private fire: AngularFireAuth, public navCtrl: NavController, public navParams: NavParams, public database: AngularFireDatabase) {
-    this.usersRef = this.database.list('users', ref => ref.equalTo('omaro'));
-
-    var commentsRef = firebase.database().ref('users');
-    commentsRef.on('child_added', function(data) {
-      console.log(data.key, data.val().user, data.val().phone);
-    });
+    this.usersRef = this.database.list('users');
     this.users = this.usersRef.snapshotChanges()
       .map(changes => {
         return changes.map(c => ({ key: c.payload.key, ...c.payload.val()}));
@@ -59,13 +54,13 @@ export class RegisterPage {
 
     this.fire.auth.createUserWithEmailAndPassword(this.email.value, this.password.value)
       .then(data => {
-        this.usersRef.push({
-          user: this.email.value,
-          password: this.password.value,
-          username: this.username.value,
-          phone: this.phone.value
-
-        });
+        this.usersRef.set(this.username.value,
+          {
+            user: this.email.value,
+            password: this.password.value,
+            username: this.username.value,
+            phone: this.phone.value
+          });
         console.log('got data ', data);
         this.alert('Su cuenta ha sido registrada');
         this.navCtrl.push(HomePage);

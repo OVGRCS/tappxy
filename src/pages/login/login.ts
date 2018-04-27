@@ -31,7 +31,7 @@ export class LoginPage {
 
   alert(message: string) {
     this.alertCtrl.create({
-      title: 'Info!',
+      title: 'Correcto!',
       subTitle: message,
       buttons: ['OK']
     }).present();
@@ -41,7 +41,7 @@ export class LoginPage {
     this.fire.auth.signInWithEmailAndPassword(this.email.value, this.password.value)
       .then( data => {
         console.log('got some data', this.fire.auth.currentUser);
-        this.alert('Success! You\'re logged in');
+        this.alert('Bienvenido');
         this.navCtrl.setRoot( MapPage );
         // user is logged in
       })
