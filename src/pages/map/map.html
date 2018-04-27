@@ -10,5 +10,19 @@
 
 <ion-content padding>
   <div id="map_canvas"></div>
-  <h2>Perdir su taxi para la calle:{{address}},{{number}}</h2>
+
+  <ion-list>
+      <ion-item>
+        <p>Pedir su taxi en su ubicación actual:</p>
+        <p style="font-weight: bold; font-size: medium; ">{{address}},{{number}}</p>
+        <button ion-button outline item-end icon-left (click)="taxiUbicacion()">
+          <ion-icon name="car"></ion-icon>
+          Aceptar
+        </button>
+      </ion-item>
+    </ion-list>
+
+  <button ion-button outline full (click)="showPrompt()">Pedir su taxi en otra dirección</button>
 </ion-content>
+
+

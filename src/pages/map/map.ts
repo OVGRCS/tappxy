@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, Platform } from 'ionic-angular';
+import { IonicPage, NavController, Platform, AlertController } from 'ionic-angular';
 import {Geolocation} from "@ionic-native/geolocation";
+import * as firebase from "firebase";
 
 import {
   GoogleMaps,
@@ -12,7 +13,10 @@ import {
   Marker,
   LatLng
 } from '@ionic-native/google-maps';
-import {NativeGeocoder, NativeGeocoderReverseResult} from "@ionic-native/native-geocoder";
+import {NativeGeocoder, NativeGeocoderForwardResult, NativeGeocoderReverseResult} from "@ionic-native/native-geocoder";
+import {AngularFireDatabase, AngularFireList} from "angularfire2/database";
+import {Observable} from "rxjs/Observable";
+import {AngularFireAuth} from "angularfire2/auth";
 
 @IonicPage()
 @Component({
@@ -26,13 +30,26 @@ export class MapPage {
   geoCoder: any;
   address: string;
   number: string;
+  currentUser: string;
+
+  usersRef: AngularFireList<any>;
+  users: Observable<any>;
 
   constructor(
     private navCtrl: NavController,
     private googleMaps: GoogleMaps,
     private geolocation: Geolocation,
-    private nativeGeocoder: NativeGeocoder
-  ) {}
+    private nativeGeocoder: NativeGeocoder,
+    public database: AngularFireDatabase,
+    private fire:AngularFireAuth,
+    private alertCtrl: AlertController
+  ) {
+    this.usersRef = this.database.list('trayectos');
+    this.users = this.usersRef.snapshotChanges()
+      .map(changes => {
+        return changes.map(c => ({ key: c.payload.key, ...c.payload.val()}));
+      });
+  }
 
   ionViewDidLoad(){
     this.fetCords();
@@ -63,7 +80,7 @@ export class MapPage {
         };
 
         this.map.addMarker(markerOptions);
-        this.getPosition();
+        //this.getPosition();
       })
       .catch(error =>{
         console.log(error);
@@ -79,34 +96,13 @@ export class MapPage {
   }
 
   private fetCords() {
-    // maps api key : AIzaSyCZhTJB1kFAP70RuwDtt6uso9e3DCLdRWs
-    // ionic plugin add cordova-plugin-googlemaps --variable API_KEY_FOR_ANDROID="AIzaSyCZhTJB1kFAP70RuwDtt6uso9e3DCLdRWs"
     this.geolocation.getCurrentPosition().then((resp) => {
-      // resp.coords.latitude
-      // resp.coords.longitude
-      // console.log(resp);
       this.fromGeo = resp.coords;
       this.loadMap(this.fromGeo.latitude, this.fromGeo.longitude)
-      // Get the products at this location
-      // Trip in progress?
     }).catch((error) => {
       console.log('Error getting location', error);
     });
   }
-
-  /*doGeocode(){
-    let request: GeocoderRequest = {
-      position: new LatLng(this.fromGeo.latitude, this.fromGeo.longitude),
-    };
-    this.geocoder.geocode(request)
-      .then((results: GeocoderResult) => {
-        this.address = [
-          (results[0].thoroughfare || "") + " " + (results[0].subThoroughfare || ""),
-          results[0].locality
-        ].join(", ");
-        console.log("data_: ", this.address);
-      });
-  }*/
 
   getPosition(): void{
     this.map.getMyLocation()
@@ -124,6 +120,67 @@ export class MapPage {
       .catch(error =>{
         console.log(error);
       });
+  }
+
+  taxiUbicacion(){
+
+    var aux= firebase.auth().currentUser.email;
+    console.log(aux);
+    
+    this.usersRef.push({
+      user: aux,
+      address: this.address
+    })
+  }
+
+  showPrompt() {
+    let prompt = this.alertCtrl.create({
+      title: 'Login',
+      message: "Enter a name for this new album you're so keen on adding",
+      inputs: [
+        {
+          name: 'address',
+          placeholder: 'Calle'
+        },
+        {
+          name: 'number',
+          placeholder: 'Número'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          handler: data => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Save',
+          handler: data => {
+            this.address = data.address;
+            this.number = data.number;
+            this.moveCamera(this.address, this.number);
+            console.log('Saved clicked' + this.address);
+          }
+        }
+      ]
+    });
+    prompt.present();
+  }
+
+  moveCamera(address: string, number: string){
+
+    this.nativeGeocoder.forwardGeocode(address)
+      .then((result: NativeGeocoderForwardResult) => {
+        this.map.animateCamera({
+          target: {
+            lon: result[0].longitude,
+            lat: result[0].latitude
+          }
+        });
+      })
+      .catch((error: any) => console.log('No ha podido ser la redireccion'))
+
   }
 
 }

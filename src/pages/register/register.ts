@@ -5,6 +5,7 @@ import {AngularFireDatabase, AngularFireDatabaseModule, AngularFireList} from "a
 import { Observable} from "rxjs/Observable";
 import {LoginPage} from "../login/login";
 import {HomePage} from "../home/home";
+import * as firebase from "firebase";
 
 /**
  * Generated class for the RegisterPage page.
@@ -27,9 +28,15 @@ export class RegisterPage {
 
   usersRef: AngularFireList<any>;
   users: Observable<any>;
+  prueba: Observable<any>;
 
   constructor(private alertCtrl: AlertController, private fire: AngularFireAuth, public navCtrl: NavController, public navParams: NavParams, public database: AngularFireDatabase) {
-    this.usersRef = this.database.list('users');
+    this.usersRef = this.database.list('users', ref => ref.equalTo('omaro'));
+
+    var commentsRef = firebase.database().ref('users');
+    commentsRef.on('child_added', function(data) {
+      console.log(data.key, data.val().user, data.val().phone);
+    });
     this.users = this.usersRef.snapshotChanges()
       .map(changes => {
         return changes.map(c => ({ key: c.payload.key, ...c.payload.val()}));
