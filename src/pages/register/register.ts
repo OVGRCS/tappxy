@@ -5,6 +5,7 @@ import {AngularFireDatabase, AngularFireDatabaseModule, AngularFireList} from "a
 import { Observable} from "rxjs/Observable";
 import {LoginPage} from "../login/login";
 import {HomePage} from "../home/home";
+import * as firebase from "firebase";
 
 /**
  * Generated class for the RegisterPage page.
@@ -27,6 +28,7 @@ export class RegisterPage {
 
   usersRef: AngularFireList<any>;
   users: Observable<any>;
+  prueba: Observable<any>;
 
   constructor(private alertCtrl: AlertController, private fire: AngularFireAuth, public navCtrl: NavController, public navParams: NavParams, public database: AngularFireDatabase) {
     this.usersRef = this.database.list('users');
@@ -52,13 +54,13 @@ export class RegisterPage {
 
     this.fire.auth.createUserWithEmailAndPassword(this.email.value, this.password.value)
       .then(data => {
-        this.usersRef.push({
-          user: this.email.value,
-          password: this.password.value,
-          username: this.username.value,
-          phone: this.phone.value
-
-        });
+        this.usersRef.set(this.username.value,
+          {
+            user: this.email.value,
+            password: this.password.value,
+            username: this.username.value,
+            phone: this.phone.value
+          });
         console.log('got data ', data);
         this.alert('Su cuenta ha sido registrada');
         this.navCtrl.push(HomePage);

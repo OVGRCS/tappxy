@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { LoggedinPage } from '../loggedin/loggedin';
+import {MapPage} from "../map/map";
 
 
 /**
@@ -30,7 +31,7 @@ export class LoginPage {
 
   alert(message: string) {
     this.alertCtrl.create({
-      title: 'Info!',
+      title: 'Correcto!',
       subTitle: message,
       buttons: ['OK']
     }).present();
@@ -40,8 +41,8 @@ export class LoginPage {
     this.fire.auth.signInWithEmailAndPassword(this.email.value, this.password.value)
       .then( data => {
         console.log('got some data', this.fire.auth.currentUser);
-        this.alert('Success! You\'re logged in');
-        this.navCtrl.setRoot( LoggedinPage );
+        this.alert('Bienvenido');
+        this.navCtrl.setRoot( MapPage );
         // user is logged in
       })
       .catch( error => {
