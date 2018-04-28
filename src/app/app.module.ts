@@ -20,6 +20,7 @@ import {MapPage} from "../pages/map/map";
 import {Geolocation} from "@ionic-native/geolocation";
 import {Diagnostic} from "@ionic-native/diagnostic";
 import {NativeGeocoder} from "@ionic-native/native-geocoder";
+import {HistoryPage} from "../pages/history/history";
 
 const firebaseAuth = {
   apiKey: "AIzaSyBkxxp48ViiHPkz0XDiTqc5lsTMqdIsBQw",
@@ -38,7 +39,8 @@ const firebaseAuth = {
     LoginPage,
     RegisterPage,
     LoggedinPage,
-    MapPage
+    MapPage,
+    HistoryPage
   ],
   imports: [
     BrowserModule,
@@ -55,7 +57,8 @@ const firebaseAuth = {
     LoginPage,
     RegisterPage,
     LoggedinPage,
-    MapPage
+    MapPage,
+    HistoryPage
   ],
   providers: [
     StatusBar,

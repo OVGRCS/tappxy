@@ -4,6 +4,8 @@ import { NavController, AlertController } from 'ionic-angular';
 import { LoginPage } from '../login/login';
 import { RegisterPage } from '../register/register';
 import {MapPage} from "../map/map";
+import {AngularFireAuth} from "angularfire2/auth";
+import * as firebase from "firebase";
 
 @Component({
   selector: 'page-home',
@@ -14,7 +16,7 @@ export class HomePage {
   @ViewChild('email') email;
   @ViewChild('password') password;
 
-  constructor(public navCtrl: NavController, public alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public alertCtrl: AlertController, public firebase: AngularFireAuth) {
 
   }
 
@@ -27,7 +29,13 @@ export class HomePage {
   }
 
   map() {
-    this.navCtrl.push(MapPage);
+
+    let currentUser = firebase.auth().currentUser
+    if (currentUser == null){
+      this.navCtrl.push(LoginPage);
+    } else {
+      this.navCtrl.push(MapPage);
+    }
   }
 
 }
