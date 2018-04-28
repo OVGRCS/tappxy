@@ -6,6 +6,7 @@ import { Observable} from "rxjs/Observable";
 import firebase, {database} from "firebase";
 import { AngularFireDatabase, FirebaseListObservable} from 'angularfire2/database';
 import {errorHandler} from "@angular/platform-browser/src/browser";
+import {onChildAdded} from "angularfire2/database-deprecated";
 
 
 
@@ -30,32 +31,34 @@ export class LoggedinPage {
   public telefono: string;
   public name: any;
   public pass: any;
+  public emailComprobar: any;
+  public datos:FirebaseListObservable<any>;
 
   constructor(private alertCtrl: AlertController, private fire: AngularFireAuth, public navCtrl: NavController, public navParams: NavParams, public database: AngularFireDatabase) {
-    this.telefono="";
+    this.emailU=firebase.auth().currentUser.uid;
+    firebase.database().ref("/users/"+this.emailU).on("value",function (snapshot) {
+
+      var telefono=snapshot.val().phone;
+      var email=snapshot.val().user;
+      var user = snapshot.val().username;
+      var pass = snapshot.val().password;
+        console.log("snapshot",snapshot.val().phone);
+
+      var user=document.createElement("article");
+      var contenido= "<h2>telefono= "+telefono+"</h2>" +
+        "<h2> email= "+email+"</h2>";
+      user.innerHTML=contenido;
+      document.getElementById("nombre").appendChild(user);
+
+
+    });
     }
 
-
+  ngOnInit(){
+    this.datos=this.database.list("/users/"+this.emailU);
+  }
 
   ionViewDidLoad() {
-    var myUserId = firebase.auth().currentUser.email;
-    var topUserPostsRef = firebase.database().ref('/users');
-
-    console.log('id',topUserPostsRef.key);
-
-    var emailAuth= firebase.auth().currentUser.email;
-    const commentsRef = firebase.database().ref('users/');
-    commentsRef.on('child_added', function(data) {
-      return data.val().phone
-      /*if(emailAuth==data.val().user){
-
-        this.asignarvalor(data.val().phone);
-      }*/
-    });
-   /* console.log('aux',aux);
-    this.telefono=;
-    console.log('telefono',this.telefono); */
-
 
   }
 

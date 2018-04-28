@@ -54,7 +54,7 @@ export class RegisterPage {
 
     this.fire.auth.createUserWithEmailAndPassword(this.email.value, this.password.value)
       .then(data => {
-        this.usersRef.set(this.username.value,
+        this.usersRef.set(firebase.auth().currentUser.uid,
           {
             user: this.email.value,
             password: this.password.value,
