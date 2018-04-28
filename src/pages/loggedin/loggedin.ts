@@ -26,12 +26,6 @@ import {onChildAdded} from "angularfire2/database-deprecated";
 
 export class LoggedinPage {
 
-  public emailU: any;
-  public email: any;
-  public telefono: string;
-  public name: any;
-  public pass: any;
-  public emailComprobar: any;
   public datos:FirebaseListObservable<any>;
 
   constructor(private alertCtrl: AlertController, private fire: AngularFireAuth, public navCtrl: NavController, public navParams: NavParams, public database: AngularFireDatabase) {
@@ -40,15 +34,27 @@ export class LoggedinPage {
 
       var telefono=snapshot.val().phone;
       var email=snapshot.val().user;
-      var user = snapshot.val().username;
+      var username = snapshot.val().username;
       var pass = snapshot.val().password;
-        console.log("snapshot",snapshot.val().phone);
 
-      var user=document.createElement("article");
-      var contenido= "<h2>telefono= "+telefono+"</h2>" +
-        "<h2> email= "+email+"</h2>";
-      user.innerHTML=contenido;
+      var user=document.createElement("p");
+      var emailuser=document.createElement("p");
+      var phoneuser=document.createElement("p");
+      var passuser=document.createElement("p");
+      var contenidoUser= "<h2>Nombre: </h2><p>"+username+"</p>";
+      var contenidoEmailuser= "<h2>Email: </h2><p>"+email+"</p>";
+      var contenidoTelefono= "<h2>Telefono: </h2><p>"+telefono+"</p>";
+      var contenidoPass= "<h2>Contraseña: </h2><p>"+pass+"</p>";
+
+      user.innerHTML=contenidoUser;
+      emailuser.innerHTML=contenidoEmailuser;
+      phoneuser.innerHTML=contenidoTelefono;
+      passuser.innerHTML=contenidoPass;
+
       document.getElementById("nombre").appendChild(user);
+      document.getElementById("email").appendChild(emailuser);
+      document.getElementById("telefono").appendChild(phoneuser);
+      document.getElementById("pass").appendChild(passuser);
 
 
     });
@@ -67,26 +73,5 @@ export class LoggedinPage {
     console.log('metodo',this.telefono);
 
   }
-
-  /*asignarvalor(valor:string){
-
-    this.telefono=valor;
-    console.log('metodo',this.telefono);
-  }*/
-
- /* public items: Array<any> = [];
-  public itemRef: firebase.database.Reference = firebase.database().ref('/users');
-  constructor(){}
-  ionViewDidLoad() {
-    this.itemRef.on('value', itemSnapshot => {
-      this.items = [];
-      itemSnapshot.forEach( itemSnap => {
-        this.items.push(itemSnap.val());
-        return false;
-      });
-    });
-  }*/
-
-
 
 }
