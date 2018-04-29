@@ -42,7 +42,11 @@ export class LoginPage {
       .then( data => {
         console.log('got some data', this.fire.auth.currentUser);
         this.alert('Bienvenido');
+<<<<<<< HEAD
         this.navCtrl.setRoot( LoggedinPage );
+=======
+        this.navCtrl.push( MapPage );
+>>>>>>> master
         // user is logged in
       })
       .catch( error => {
