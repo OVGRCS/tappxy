@@ -7,6 +7,8 @@ import firebase, {database} from "firebase";
 import { AngularFireDatabase, FirebaseListObservable} from 'angularfire2/database';
 import {errorHandler} from "@angular/platform-browser/src/browser";
 import {onChildAdded} from "angularfire2/database-deprecated";
+import {MapPage} from "../map/map";
+import {LoginPage} from "../login/login";
 
 
 
@@ -29,35 +31,41 @@ export class LoggedinPage {
   public datos:FirebaseListObservable<any>;
 
   constructor(private alertCtrl: AlertController, private fire: AngularFireAuth, public navCtrl: NavController, public navParams: NavParams, public database: AngularFireDatabase) {
-    this.emailU=firebase.auth().currentUser.uid;
-    firebase.database().ref("/users/"+this.emailU).on("value",function (snapshot) {
 
-      var telefono=snapshot.val().phone;
-      var email=snapshot.val().user;
-      var username = snapshot.val().username;
-      var pass = snapshot.val().password;
+    }
 
-      var user=document.createElement("p");
-      var emailuser=document.createElement("p");
-      var phoneuser=document.createElement("p");
-      var passuser=document.createElement("p");
-      var contenidoUser= "<h2>Nombre: </h2><p>"+username+"</p>";
-      var contenidoEmailuser= "<h2>Email: </h2><p>"+email+"</p>";
-      var contenidoTelefono= "<h2>Telefono: </h2><p>"+telefono+"</p>";
-      var contenidoPass= "<h2>Contraseña: </h2><p>"+pass+"</p>";
+    crearelementos(){
+      var emailU=firebase.auth().currentUser.uid;
+      firebase.database().ref("/users/"+emailU).on("value",function (snapshot) {
 
-      user.innerHTML=contenidoUser;
-      emailuser.innerHTML=contenidoEmailuser;
-      phoneuser.innerHTML=contenidoTelefono;
-      passuser.innerHTML=contenidoPass;
+        var telefono=snapshot.val().phone;
+        var email=snapshot.val().user;
+        var username = snapshot.val().username;
+        var pass = snapshot.val().password;
+        console.log("email",email);
+        var user=document.createElement("p");
+        var emailuser=document.createElement("p");
+        var phoneuser=document.createElement("p");
+        var passuser=document.createElement("p");
+        console.log("emailuser",emailuser);
+        var contenidoUser= "<h2>Nombre: </h2><p>"+username+"</p>";
+        var contenidoEmailuser= "<h2>Email: </h2><p>"+email+"</p>";
+        var contenidoTelefono= "<h2>Telefono: </h2><p>"+telefono+"</p>";
+        var contenidoPass= "<h2>Contraseña: </h2><p>"+pass+"</p>";
+        console.log("contenidouser",contenidoUser);
+        user.innerHTML=contenidoUser;
+        emailuser.innerHTML=contenidoEmailuser;
+        phoneuser.innerHTML=contenidoTelefono;
+        passuser.innerHTML=contenidoPass;
+        console.log("user",user);
 
-      document.getElementById("nombre").appendChild(user);
-      document.getElementById("email").appendChild(emailuser);
-      document.getElementById("telefono").appendChild(phoneuser);
-      document.getElementById("pass").appendChild(passuser);
+        document.getElementById("nombre").appendChild(user);
+        /* document.getElementById("email").appendChild(emailuser);
+         document.getElementById("telefono").appendChild(phoneuser);
+         document.getElementById("pass").appendChild(passuser);*/
 
 
-    });
+      });
     }
 
   ngOnInit(){
@@ -65,8 +73,16 @@ export class LoggedinPage {
   }
 
   ionViewDidLoad() {
-
+    let currentUser = firebase.auth().currentUser
+    if (currentUser == null){
+      this.navCtrl.push(LoginPage);
+    } else {
+      this.crearelementos();
+    }
   }
+
+
+
 
   private asignarvalor(phone: any) {
     this.telefono=phone;

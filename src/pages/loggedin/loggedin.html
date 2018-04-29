@@ -6,7 +6,13 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Perfil</ion-title>
+
+    <ion-row>
+      <ion-col><ion-title padding-top>Perfil</ion-title></ion-col>
+      <ion-col offset-4>
+        <button ion-button outline align-items-end item-end (click)="logOut()">Logout</button>
+      </ion-col>
+    </ion-row>
   </ion-navbar>
 
 </ion-header>

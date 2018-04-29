@@ -42,7 +42,7 @@ export class LoginPage {
       .then( data => {
         console.log('got some data', this.fire.auth.currentUser);
         this.alert('Bienvenido');
-        
+
 
         this.navCtrl.push( MapPage );
 

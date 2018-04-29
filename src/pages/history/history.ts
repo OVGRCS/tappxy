@@ -19,7 +19,7 @@ import * as firebase from "firebase";
 export class HistoryPage {
 
   constructor(private alertCtrl: AlertController, private fire: AngularFireAuth, public navCtrl: NavController, public navParams: NavParams, public database: AngularFireDatabase) {
-    this.emailU=firebase.auth().currentUser.email;
+    var emailU=firebase.auth().currentUser.email;
     firebase.database().ref("/trayectos/").orderByChild("user").equalTo(firebase.auth().currentUser.email).on("child_added",function (snapshot) {
       var address=snapshot.val().address;
       var elementAddress=document.createElement("p");
