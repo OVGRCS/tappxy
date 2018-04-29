@@ -4,11 +4,11 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import {AngularFireDatabase, AngularFireDatabaseModule, AngularFireList} from "angularfire2/database";
 import { Observable} from "rxjs/Observable";
 import firebase, {database} from "firebase";
-import { AngularFireDatabase, FirebaseListObservable} from 'angularfire2/database';
 import {errorHandler} from "@angular/platform-browser/src/browser";
 import {onChildAdded} from "angularfire2/database-deprecated";
 import {MapPage} from "../map/map";
 import {LoginPage} from "../login/login";
+import {HomePage} from "../home/home";
 
 
 
@@ -27,8 +27,6 @@ import {LoginPage} from "../login/login";
 
 
 export class LoggedinPage {
-
-  public datos:FirebaseListObservable<any>;
 
   constructor(private alertCtrl: AlertController, private fire: AngularFireAuth, public navCtrl: NavController, public navParams: NavParams, public database: AngularFireDatabase) {
 
@@ -60,17 +58,15 @@ export class LoggedinPage {
         console.log("user",user);
 
         document.getElementById("nombre").appendChild(user);
-        /* document.getElementById("email").appendChild(emailuser);
-         document.getElementById("telefono").appendChild(phoneuser);
-         document.getElementById("pass").appendChild(passuser);*/
+        document.getElementById("email").appendChild(emailuser);
+        document.getElementById("telefono").appendChild(phoneuser);
+        document.getElementById("pass").appendChild(passuser);
 
 
       });
     }
 
-  ngOnInit(){
-    this.datos=this.database.list("/users/"+this.emailU);
-  }
+
 
   ionViewDidLoad() {
     let currentUser = firebase.auth().currentUser
@@ -80,14 +76,11 @@ export class LoggedinPage {
       this.crearelementos();
     }
   }
-
-
-
-
-  private asignarvalor(phone: any) {
-    this.telefono=phone;
-    console.log('metodo',this.telefono);
-
+  logOut(){
+    this.fire.auth.signOut();
+    this.navCtrl.setRoot(HomePage);
   }
+
+
 
 }
