@@ -1,6 +1,6 @@
 {
   "name": "tappxy",
-  "app_id": "",
+  "app_id": "f6f2378c",
   "type": "ionic-angular",
   "integrations": {
     "cordova": {}
